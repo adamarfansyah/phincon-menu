@@ -1,0 +1,17 @@
+@import "../../styles/base";
+
+.cardMeal__cardIngridient {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  .cardIngridient__img {
+    padding: 10px;
+    margin-right: 20px;
+    background-color: transparent;
+    border-radius: 10px;
+    box-shadow: 0px 1.7584840059280396px 4.396209716796875px 0px rgba(0, 0, 0, 0.15);
+  }
+  h3 {
+    color: $textGray;
+  }
+}

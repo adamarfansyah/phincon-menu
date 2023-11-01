@@ -7,7 +7,8 @@
   gap: 30px;
   border-radius: 10px;
   padding: 20px;
-  margin-right: 100px;
+  margin-right: 200px;
+  max-width: 700px;
   .cardMeal__desc {
     width: 500px;
     h1 {
@@ -21,7 +22,7 @@
   .cardMeal__img {
     width: 400px;
     height: 400px;
-    left: 130px;
+    left: 0px;
     top: 50px;
     position: relative;
     background-position: center;
@@ -32,26 +33,11 @@
   }
 
   .cardMeal__ingridientsContents {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
+    display: flex;
+    width: 400px;
+    justify-content: space-between;
     gap: 10px;
     margin-top: 20px;
-  }
-
-  .cardMeal__cardIngridient {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    .cardIngridient__img {
-      padding: 10px;
-      margin-right: 20px;
-      background-color: transparent;
-      border-radius: 10px;
-      box-shadow: 0px 1.7584840059280396px 4.396209716796875px 0px rgba(0, 0, 0, 0.15);
-    }
-    h3 {
-      color: $textGray;
-    }
   }
 
   .cardMeal__btnContainer {
