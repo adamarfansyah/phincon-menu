@@ -11,6 +11,7 @@ export default function HomePage({ categories }) {
   const [categoryName, setCategoryName] = useState("Beef");
   const [menusCategory, setMenusCategory] = useState([]);
   const [randomRecipes, setRandomRecipes] = useState([]);
+  const [favList, setFavList] = useState([]);
 
   useEffect(() => {
     if (categoryName !== "Favourite") {
@@ -22,22 +23,51 @@ export default function HomePage({ categories }) {
 
   useEffect(() => {
     fetchRandomRecipes();
+    fetchListFavourite();
   }, []);
 
   const fetchListFavourite = async () => {
     try {
       const response = await callApi({ baseURL: URL_JSONSERVER, endpoint: "/favourite" });
-      setMenusCategory(response);
+      setFavList(response);
     } catch (error) {
       console.log(console.error());
     }
   };
 
+  const fetchDetail = async (item) => {
+    try {
+      return await callApi({ endpoint: `/lookup.php?i=${item.idMeal}` })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const fetchMenuCategory = async () => {
     try {
       const response = await callApi({ endpoint: `/filter.php?c=${categoryName}` });
       const sliceResponse = response.meals.slice(0, 5);
-      setMenusCategory(sliceResponse);
+      const modifiedData = [];
+      Promise.all(sliceResponse?.map(async (item) => {
+        return fetchDetail(item)
+        .then((res) => {
+          modifiedData.push({
+            ...item,
+            strInstructions: res?.meals[0]?.strInstructions,
+            strIngredient1: res?.meals[0]?.strIngredient1,
+            strIngredient2: res?.meals[0]?.strIngredient2,
+            strIngredient3: res?.meals[0]?.strIngredient3,
+            strIngredient4: res?.meals[0]?.strIngredient4,
+            strMeasure1: res?.meals[0]?.strMeasure1,
+            strMeasure2: res?.meals[0]?.strMeasure2,
+            strMeasure3: res?.meals[0]?.strMeasure3,
+            strMeasure4: res?.meals[0]?.strMeasure4,
+          })
+        })
+      }))
+      .finally(() => {
+        setMenusCategory(modifiedData);
+      })
     } catch (error) {
       console.log(error);
     }
@@ -72,15 +102,14 @@ export default function HomePage({ categories }) {
           <h4 onClick={() => getIdCategory("Favourite")}>Favourite</h4>
         </div>
         {categoryName === "Favourite" ? (
-          <Favourite payload={menusCategory} />
+          <Favourite payload={favList} />
         ) : (
           <div className={styles.homePage__cardMeal}>
             {menusCategory.map((item) => {
-              return <CardMeal key={item.idMeal} mealId={item.idMeal} />;
+              return <CardMeal key={item.idMeal} mealId={item.idMeal} menu={item} favList={favList} />;
             })}
           </div>
         )}
-
         <MoreRecipes payload={randomRecipes} />
       </div>
     </div>
