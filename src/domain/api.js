@@ -10,7 +10,7 @@ export const callApi = async ({
   baseURL = "https://www.themealdb.com/api/json/v1/1",
   endpoint = "",
   method = "GET",
-  body = {},
+  body,
 }) => {
   const response = await Api.request({
     baseURL: baseURL,
